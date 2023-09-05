@@ -1,23 +1,35 @@
 import streamlit as st
 import SessionState
 import streamlit.components.v1 as components
+
 def render_mermaid_chart(diagram_code):
     with open("mermaid_component/mermaid_component.html", "r") as f:
         html_code = f.read().replace("{{ diagram_code }}", diagram_code)
     components.html(html_code, height=800)
+
 st.title("Learning Path")
+
 learning_path = {
     "Beginner": ["Task 1", "Task 2", "Task 3"],
     "Intermediate": ["Task 4", "Task 5"],
     "Advanced": ["Task 6", "Task 7", "Task 8", "Task 9"],
 }
+
+# Get the session state
+session_state = SessionState.get(task_states={})
+
 diagram_code = "graph TD\n"
 prev_level = None
+
 for level, tasks in learning_path.items():
     for i, task in enumerate(tasks):
-        checked = st.checkbox(task)
+        task_key = f"{level}_{task}"
+        checked = session_state.task_states.get(task_key, False)  # Get the task state from session_state
+        session_state.task_states[task_key] = checked  # Store the task state back in session_state
+        
         node_id = f"{level[0]}{i}"
         diagram_code += f'{node_id}["{task} {"(Done)" if checked else ""}"]\n'
+        
         if prev_level:
             diagram_code += f"{prev_level} --> {node_id}\n"
         if i > 0:
@@ -25,3 +37,9 @@ for level, tasks in learning_path.items():
     prev_level = f"{level[0]}{len(tasks)-1}"
 
 render_mermaid_chart(diagram_code)
+
+# Render checkboxes after the diagram
+for level, tasks in learning_path.items():
+    for task in tasks:
+        task_key = f"{level}_{task}"
+        session_state.task_states[task_key] = st.checkbox(task, value=session_state.task_states.get(task_key, False))
