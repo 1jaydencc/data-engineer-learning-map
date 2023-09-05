@@ -1,6 +1,11 @@
 import streamlit as st
 import SessionState
 
+def render_mermaid_chart(diagram_code):
+    with open("mermaid_component/mermaid_component.html", "r") as f:
+        html_code = f.read().replace("{{ diagram_code }}", diagram_code)
+    components.html(html_code, height=800)
+
 # Data
 milestones = {
     'Milestone 1': {
