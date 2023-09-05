@@ -16,8 +16,8 @@ learning_path = {
 }
 
 diagram_code = "graph TD\n"
-render_mermaid_chart(diagram_code)
 prev_level = None
+render_mermaid_chart(diagram_code)
 
 for level, tasks in learning_path.items():
     for i, task in enumerate(tasks):
