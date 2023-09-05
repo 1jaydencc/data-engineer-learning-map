@@ -15,7 +15,7 @@ learning_path = {
     "Advanced": ["Task 6", "Task 7", "Task 8", "Task 9"],
 }
 
-# Generate the Mermaid code after processing checkboxes
+# Generate the initial Mermaid code
 diagram_code = "graph TD\n"
 prev_level = None
 task_states = {}
@@ -33,4 +33,10 @@ for level, tasks in learning_path.items():
             diagram_code += f"{level[0]}{i-1} --> {node_id}\n"
     prev_level = f"{level[0]}{len(tasks)-1}"
 
+# Place the Mermaid diagram above the checkboxes
 render_mermaid_chart(diagram_code)
+
+for level, tasks in learning_path.items():
+    for task in tasks:
+        task_key = f"{level}_{task}"
+        st.checkbox(task, value=task_states[task_key], key=task_key)
