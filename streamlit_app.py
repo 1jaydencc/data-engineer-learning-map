@@ -7,7 +7,6 @@ def render_mermaid_chart(diagram_code):
         html_code = f.read().replace("{{ diagram_code }}", diagram_code)
     components.html(html_code, height=800)
 
-
 st.title("Learning Path")
 
 learning_path = {
@@ -16,13 +15,18 @@ learning_path = {
     "Advanced": ["Task 6", "Task 7", "Task 8", "Task 9"],
 }
 
+# Generate the Mermaid code after processing checkboxes
 diagram_code = "graph TD\n"
 prev_level = None
+task_states = {}
 
 for level, tasks in learning_path.items():
     for i, task in enumerate(tasks):
+        task_key = f"{level}_{task}"
+        checked = st.checkbox(task, key=task_key)
+        task_states[task_key] = checked
         node_id = f"{level[0]}{i}"
-        diagram_code += f'{node_id}["{task}"]\n'
+        diagram_code += f"{node_id}[{task} {'(Done)' if task_states[task_key] else ''}]\n"
         if prev_level:
             diagram_code += f"{prev_level} --> {node_id}\n"
         if i > 0:
@@ -30,7 +34,3 @@ for level, tasks in learning_path.items():
     prev_level = f"{level[0]}{len(tasks)-1}"
 
 render_mermaid_chart(diagram_code)
-
-for level, tasks in learning_path.items():
-    for task in tasks:
-        st.checkbox(task)
