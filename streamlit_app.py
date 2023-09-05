@@ -34,5 +34,4 @@ for level, tasks in learning_path.items():
             diagram_code += f"{level[0]}{i-1} --> {node_id}\n"
     prev_level = f"{level[0]}{len(tasks)-1}"
 
-
 render_mermaid_chart(diagram_code)
