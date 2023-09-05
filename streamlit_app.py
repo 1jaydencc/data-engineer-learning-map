@@ -30,7 +30,6 @@ for level, tasks in learning_path.items():
 
 render_mermaid_chart(diagram_code)
 
-# Render the checkboxes after the diagram
 for level, tasks in learning_path.items():
     for task in tasks:
         st.checkbox(task)
