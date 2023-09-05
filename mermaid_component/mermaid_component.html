@@ -2,17 +2,17 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mermaid Component</title>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/mermaid@8/dist/mermaid.min.js"></script>
+    <title>Mermaid Streamlit Component</title>
+    <script src="https://unpkg.com/mermaid@8/dist/mermaid.min.js"></script>
 </head>
 <body>
-    <div class="mermaid">
-        {{ diagram_code }}
-    </div>
-    <script type="text/javascript">
-        mermaid.initialize({startOnLoad:true});
+    <div id="mermaid"></div>
+    <script>
+        mermaid.initialize({startOnLoad: true});
+        mermaid.mermaidAPI.render('graphDiv', '{{ diagram_code }}', (svgCode) => {
+            document.getElementById('mermaid').innerHTML = svgCode;
+        });
     </script>
 </body>
 </html>
