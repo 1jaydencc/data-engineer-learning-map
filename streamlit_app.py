@@ -22,7 +22,6 @@ for level, tasks in learning_path.items():
     for i, task in enumerate(tasks):
         checked = st.checkbox(task)
         node_id = f"{level[0]}{i}"
-        # Enclose in quotes to prevent syntax error
         diagram_code += f'{node_id}["{task} {"(Done)" if checked else ""}"]\n'
         if prev_level:
             diagram_code += f"{prev_level} --> {node_id}\n"
@@ -30,4 +29,5 @@ for level, tasks in learning_path.items():
             diagram_code += f"{level[0]}{i-1} --> {node_id}\n"
     prev_level = f"{level[0]}{len(tasks)-1}"
 
+st.markdown("```" + diagram_code + "```")  # Display the mermaid code
 render_mermaid_chart(diagram_code)
