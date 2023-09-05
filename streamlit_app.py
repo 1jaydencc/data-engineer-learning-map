@@ -2,7 +2,6 @@ import streamlit as st
 import SessionState
 import streamlit.components.v1 as components
 
-
 def render_mermaid_chart(diagram_code):
     with open("mermaid_component/mermaid_component.html", "r") as f:
         html_code = f.read().replace("{{ diagram_code }}", diagram_code)
@@ -23,7 +22,8 @@ for level, tasks in learning_path.items():
     for i, task in enumerate(tasks):
         checked = st.checkbox(task)
         node_id = f"{level[0]}{i}"
-        diagram_code += f"{node_id}[{task} {'(Done)' if checked else ''}]\n"
+        # Enclose in quotes to prevent syntax error
+        diagram_code += f'{node_id}["{task} {"(Done)" if checked else ""}"]\n'
         if prev_level:
             diagram_code += f"{prev_level} --> {node_id}\n"
         if i > 0:
@@ -31,4 +31,3 @@ for level, tasks in learning_path.items():
     prev_level = f"{level[0]}{len(tasks)-1}"
 
 render_mermaid_chart(diagram_code)
-
