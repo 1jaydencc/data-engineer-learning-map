@@ -9,6 +9,6 @@ class _SessionState:
 def get(**kwargs):
     """Gets a SessionState object for the current session.
     Creates a new object if necessary."""
-    if not hasattr(st, '_session_state'):
-        st._session_state = _SessionState(**kwargs)
-    return st._session_state
+    if 'session_state' not in st.session_info:
+        st.session_info.session_state = _SessionState(**kwargs)
+    return st.session_info.session_state
