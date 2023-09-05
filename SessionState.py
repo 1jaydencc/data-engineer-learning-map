@@ -1,3 +1,5 @@
+import streamlit as st
+
 class _SessionState:
     def __init__(self, **kwargs):
         for key, val in kwargs.items():
