@@ -17,8 +17,6 @@ learning_path = {
 diagram_code = "graph TD\n"
 prev_level = None
 
-task_states = SessionState.get(task_states={})
-
 for level, tasks in learning_path.items():
     for i, task in enumerate(tasks):
         task_key = f"{level}_{task}"
