@@ -9,8 +9,11 @@ def render_mermaid_chart(diagram_code):
 
 st.title("Learning Path")
 
-# Retrieve or initialize the session state for checkboxes
-session_state = SessionState.get(task_states={})
+session_state = SessionState.get()
+
+# Ensure task_states exists in session state
+if not hasattr(session_state, 'task_states'):
+    session_state.task_states = {}
 
 learning_path = {
     "Beginner": ["Task 1", "Task 2", "Task 3"],
