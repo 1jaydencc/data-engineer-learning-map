@@ -5,7 +5,9 @@ import streamlit.components.v1 as components
 def render_mermaid_chart(diagram_code):
     with open("mermaid_component/mermaid_component.html", "r") as f:
         html_code = f.read().replace("{{ diagram_code }}", diagram_code)
+    print(html_code)  # For troubleshooting
     components.html(html_code, height=800)
+
 
 st.title("Learning Path")
 
