@@ -15,9 +15,11 @@ learning_path = {
     "Advanced": ["Task 6", "Task 7", "Task 8", "Task 9"],
 }
 
-# Generate the initial Mermaid code
 diagram_code = "graph TD\n"
 prev_level = None
+
+task_states = SessionState.get(task_states={})
+
 for level, tasks in learning_path.items():
     for i, task in enumerate(tasks):
         task_key = f"{level}_{task}"
@@ -25,7 +27,6 @@ for level, tasks in learning_path.items():
         task_states[task_key] = checked
         node_id = f"{level[0]}{i}"
         
-        # Modified this line to remove the unnecessary space
         diagram_code += f"{node_id}[{task}{' (Done)' if checked else ''}]\n"
         
         if prev_level:
@@ -34,10 +35,7 @@ for level, tasks in learning_path.items():
             diagram_code += f"{level[0]}{i-1} --> {node_id}\n"
     prev_level = f"{level[0]}{len(tasks)-1}"
 
-# Add a newline at the end of the diagram code
 diagram_code += "\n"
 
-st.write(diagram_code)
-
-# Place the Mermaid diagram above the checkboxes
 render_mermaid_chart(diagram_code)
+
