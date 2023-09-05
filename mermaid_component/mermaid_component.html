@@ -10,7 +10,8 @@
     <div id="mermaid"></div>
     <script>
         mermaid.initialize({startOnLoad: true});
-        mermaid.mermaidAPI.render('graphDiv', '{{ diagram_code }}', (svgCode) => {
+        const diagramCode = `{{ diagram_code }}`;
+        mermaid.mermaidAPI.render('graphDiv', diagramCode, (svgCode) => {
             document.getElementById('mermaid').innerHTML = svgCode;
         });
     </script>
