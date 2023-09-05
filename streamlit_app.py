@@ -18,15 +18,13 @@ learning_path = {
 # Generate the initial Mermaid code
 diagram_code = "graph TD\n"
 prev_level = None
-task_states = {}
 
 for level, tasks in learning_path.items():
     for i, task in enumerate(tasks):
+        node_id = f"{level[0]}{i}"
         task_key = f"{level}_{task}"
         checked = st.checkbox(task, key=task_key)
-        task_states[task_key] = checked
-        node_id = f"{level[0]}{i}"
-        diagram_code += f"{node_id}[{task} {'(Done)' if task_states[task_key] else ''}]\n"
+        diagram_code += f"{node_id}[{task} {'(Done)' if checked else ''}]\n"
         if prev_level:
             diagram_code += f"{prev_level} --> {node_id}\n"
         if i > 0:
@@ -35,8 +33,3 @@ for level, tasks in learning_path.items():
 
 # Place the Mermaid diagram above the checkboxes
 render_mermaid_chart(diagram_code)
-
-for level, tasks in learning_path.items():
-    for task in tasks:
-        task_key = f"{level}_{task}"
-        st.checkbox(task, value=task_states[task_key], key=task_key)
