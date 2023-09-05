@@ -1,5 +1,7 @@
 import streamlit as st
 import SessionState
+import streamlit.components.v1 as components
+
 
 def render_mermaid_chart(diagram_code):
     with open("mermaid_component/mermaid_component.html", "r") as f:
