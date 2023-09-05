@@ -1,62 +1,35 @@
 import streamlit as st
-import plotly.graph_objects as go
+import SessionState
 
-def create_roadmap():
-    milestones = ["Start", "Milestone A", "Milestone B", "Milestone C", "Finish"]
-
-    # Construct the figure
-    fig = go.Figure()
-
-    # Add a scatter plot for milestones
-    fig.add_trace(go.Scatter(
-        x=list(range(len(milestones))),
-        y=[1] * len(milestones),
-        mode="markers+text",
-        name="Milestones",
-        text=milestones,
-        textposition="bottom center"
-    ))
-
-    # Customize layout
-    fig.update_layout(
-        showlegend=False,
-        xaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
-        yaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
-        plot_bgcolor='white'
-    )
-
-    return fig
-
-def display_learning_path():
-    st.title("Learning Path Roadmap")
-
-    roadmap_fig = create_roadmap()
-    st.plotly_chart(roadmap_fig)
-
-    st.write("## Tasks & Courses per Milestone")
-    
-    # Example tasks & courses for each milestone
-    tasks_courses = {
-        "Milestone A": {
-            "tasks": ["Task A1", "Task A2"],
-            "courses": ["Course A1", "Course A2"]
-        },
-        "Milestone B": {
-            "tasks": ["Task B1"],
-            "courses": ["Course B1", "Course B2", "Course B3"]
-        },
-        # ... add more as needed
+# Data
+milestones = {
+    'Milestone 1': {
+        'Tasks': {
+            'Task 1': ['Course 1', 'Course 2'],
+            'Task 2': ['Course 3']
+        }
+    },
+    'Milestone 2': {
+        'Tasks': {
+            'Task 3': ['Course 4', 'Course 5'],
+            'Task 4': []
+        }
     }
+}
 
-    for milestone, data in tasks_courses.items():
-        st.write(f"### {milestone}")
-        st.write("Tasks:")
-        for task in data["tasks"]:
-            checkbox_key = f"task_{milestone}_{task}"
-            st.checkbox(task, key=checkbox_key)
-        st.write("Courses:")
-        for course in data["courses"]:
-            st.write(f"- {course}")
+# Create a session state for user's progress
+session_state = SessionState.get(progress={})
 
-if __name__ == "__main__":
-    display_learning_path()
+# Display data
+for milestone, details in milestones.items():
+    st.markdown(f"### ➡️ {milestone}")
+    
+    tasks = details['Tasks']
+    for task, courses in tasks.items():
+        task_status = session_state.progress.get(task, False)
+        session_state.progress[task] = st.checkbox(task, value=task_status)
+        
+        # Display linked courses
+        for course in courses:
+            course_status = session_state.progress.get(course, False)
+            session_state.progress[course] = st.checkbox(course, value=course_status, key=course)
