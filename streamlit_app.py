@@ -6,28 +6,19 @@ def render_mermaid_chart(diagram_code):
         html_code = f.read().replace("{{ diagram_code }}", diagram_code)
     components.html(html_code, height=800)
 
-st.title("Learning Path")
+st.title("Data Engineering Learning Map")
 
-learning_path = {
-    "Beginner": ["Task 1", "Task 2", "Task 3"],
-    "Intermediate": ["Task 4", "Task 5"],
-    "Advanced": ["Task 6", "Task 7", "Task 8", "Task 9"],
-}
-
+# Starting point of the diagram_code
 diagram_code = "graph TD\n"
-prev_level = None
 
-for level, tasks in learning_path.items():
-    for i, task in enumerate(tasks):
-        checked = st.checkbox(task)
-        
-        node_id = f"{level[0]}{i}"
-        diagram_code += f'{node_id}["{task} {"(Done)" if checked else ""}"]\n'
-        
-        if prev_level:
-            diagram_code += f"{prev_level} --> {node_id}\n"
-        if i > 0:
-            diagram_code += f"{level[0]}{i-1} --> {node_id}\n"
-    prev_level = f"{level[0]}{len(tasks)-1}"
+# Hardcoded diagram code for "Getting Started"
+task1_id = "B0"
+diagram_code += f'{task1_id}["Getting Started"]\n'
+
+sub_node_prefix = f"{task1_id}S"
+for j, sub_item in enumerate(sub_items_task1):
+    sub_node_id = f"{sub_node_prefix}{j}"
+    diagram_code += f'{sub_node_id}["{sub_item}"]\n'
+    diagram_code += f"{task1_id} --> {sub_node_id}\n"
 
 render_mermaid_chart(diagram_code)
