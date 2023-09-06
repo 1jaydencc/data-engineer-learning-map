@@ -34,8 +34,8 @@ elif user_changed_getting_started and not getting_started_checked:
 all_sub_items_checked = True
 for i, sub_item in enumerate(sub_items_task1):
     # Use Markdown for indented display, and then display the checkbox without the label
-    st.markdown(f"   - {sub_item}")  # 3 spaces for indentation
-    sub_item_checked = st.checkbox("", key=f"subitem_{i}", value=st.session_state.sub_items_checked[i], inline=True)
+    st.markdown(f"   - {sub_item}", unsafe_allow_html=True)  # 3 spaces for indentation
+    sub_item_checked = st.checkbox("", key=f"subitem_{i}", value=st.session_state.sub_items_checked[i])
 
     if sub_item_checked != st.session_state.sub_items_checked[i]:
         st.session_state.sub_items_checked[i] = sub_item_checked
