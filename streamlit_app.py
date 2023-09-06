@@ -10,36 +10,43 @@ st.title("Learning Path")
 
 sub_items_task1 = ["Architecture overview", "Data engineering life cycle", "Data storage capabilities"]
 
-# Check if state variables are initialized or not
+# Initial setup for session state variables
 if 'getting_started_checked' not in st.session_state:
     st.session_state.getting_started_checked = False
 
 if 'sub_items_checked' not in st.session_state:
     st.session_state.sub_items_checked = [False] * len(sub_items_task1)
 
-# If "Getting Started" is checked, all sub-items should be checked
-if st.session_state.getting_started_checked:
-    st.session_state.sub_items_checked = [True] * len(sub_items_task1)
+# Capture the previous state of "Getting Started"
+prev_getting_started_checked = st.session_state.getting_started_checked
 
 # Checkbox for "Getting Started"
 getting_started_checked = st.checkbox("Getting Started", value=st.session_state.getting_started_checked)
-if getting_started_checked != st.session_state.getting_started_checked:
-    st.session_state.getting_started_checked = getting_started_checked
-    if getting_started_checked:
-        st.session_state.sub_items_checked = [True] * len(sub_items_task1)
 
-# Checkboxes for sub-items
+# Logic for the main task and its sub-items
+user_changed_getting_started = prev_getting_started_checked != getting_started_checked
+
+if user_changed_getting_started and getting_started_checked:
+    st.session_state.sub_items_checked = [True] * len(sub_items_task1)
+elif user_changed_getting_started and not getting_started_checked:
+    st.session_state.sub_items_checked = [False] * len(sub_items_task1)
+
 all_sub_items_checked = True
 for i, sub_item in enumerate(sub_items_task1):
+    prev_sub_item_checked = st.session_state.sub_items_checked[i]
     sub_item_checked = st.checkbox(sub_item, value=st.session_state.sub_items_checked[i])
-    if sub_item_checked != st.session_state.sub_items_checked[i]:
+    user_changed_sub_item = prev_sub_item_checked != sub_item_checked
+    
+    if user_changed_sub_item:
         st.session_state.sub_items_checked[i] = sub_item_checked
+
     if not sub_item_checked:
         all_sub_items_checked = False
 
-# If all sub-items are checked, "Getting Started" should be checked
-if all_sub_items_checked:
-    st.session_state.getting_started_checked = True
+if all_sub_items_checked and not getting_started_checked:
+    getting_started_checked = True
+
+st.session_state.getting_started_checked = getting_started_checked
 
 # Generate the mermaid diagram
 diagram_code = "graph TD\n"
